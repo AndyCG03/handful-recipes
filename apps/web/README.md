@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# apps/web — Handful Recipes
 
-## Getting Started
+Next.js 15 (App Router) · TypeScript strict · Tailwind v4 · zod · Vercel Blob. Deployed on Vercel (root directory `apps/web`).
 
-First, run the development server:
+## Run locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cd apps/web
+npm install
+cp .env.example .env.local   # then set MODEL_API_KEY
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Without `BLOB_READ_WRITE_TOKEN`, files and recipe data are stored in `apps/web/.data/` (git-ignored).
+`npm run dev` starts Node with `--use-system-ca` so the Windows certificate store is trusted.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Checks: `npm run typecheck` · `npm run lint` · `npm run build`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Architecture
 
-## Learn More
+```
+Browser                                   Server (route handlers)                 Meta Model API
+-------                                   -----------------------                 --------------
+pick video → extract 16 kHz WAV (WebAudio)
+upload video + WAV ─────────────────────► Vercel Blob (client upload)
+POST /api/recipes ──────────────────────► create recipe (edit key hashed)
+POST /process {transcribe} ─────────────► read WAV ────────────────────────────► Voice Transcribe (DIARIZATION)
+POST /process {analyze} ────────────────► upload video to Files ───────────────► Spark 1.3 (video + transcript, JSON schema)
+capture frames of "handful" steps
+POST /process {handful, frames} ────────► upload frames ───────────────────────► SAM 3.1 (boxes for hand / container)
+/ask/[token]: record voice note → WAV ──► POST /api/ask/[token] ───────────────► Voice Transcribe + Spark (merge answer)
+```
 
-To learn more about Next.js, take a look at the following resources:
+Each stage is one short request (`maxDuration` 300 s), so it fits serverless limits and can be resumed.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Path | What |
+|---|---|
+| `src/lib/domain.ts` | Domain model and validation (zod). Product rule: never convert informal measures to numbers |
+| `src/lib/server/meta.ts` | Typed Meta Model API client (server-only) |
+| `src/lib/server/pipeline.ts` | Pipeline stages and answer merge |
+| `src/lib/server/prompts.ts` | Prompts + JSON schemas for Spark |
+| `src/lib/server/storage.ts` | Storage driver: local disk or Vercel Blob (immutable JSON versions to avoid CDN staleness) |
+| `src/lib/server/recipes.ts` | Repository, owner check (sha256 + timing-safe compare), provenance (`runs`) |
+| `src/lib/client/*` | Browser media (WAV, frames), typed API client, pipeline orchestration |
+| `src/app/new` | Record / upload a recipe |
+| `src/app/recipes/[id]` | Owner review + questions to send by WhatsApp |
+| `src/app/ask/[token]` | The cook answers by voice (Spanish UI, no install) |
+| `src/app/r/[id]` | Family link: read-only living recipe |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Security model (MVP, no accounts)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- The creator gets an **edit key** stored only in their browser (localStorage); the server stores its sha256.
+- The cook's page uses a separate random **ask token**; it can only answer questions that were sent.
+- Public views strip `editKeyHash`, `askToken` and model run logs.
+- Media is stored in public Blob URLs with random suffixes (unguessable, not access-controlled).
