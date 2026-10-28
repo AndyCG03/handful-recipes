@@ -43,7 +43,7 @@ export function RecipeView({ recipe, renderStepExtra }: { recipe: PublicRecipe; 
     <div className="space-y-6">
       <video
         ref={videoRef}
-        src={recipe.videoUrl}
+        src={`${recipe.videoUrl}#t=0.5`}
         controls
         playsInline
         preload="metadata"
