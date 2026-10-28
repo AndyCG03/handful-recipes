@@ -1,0 +1,22 @@
+.env
+.env.*
+!.env.example
+node_modules/
+.next/
+out/
+__pycache__/
+*.pyc
+.venv/
+eval/videos/*
+!eval/videos/.gitkeep
+demo/footage/*
+!demo/footage/.gitkeep
+*.zip
+node_modules/
+.next/
+.data/
+.vercel/
+.claude/settings.local.json
+
+# raw validation media and transcripts (personal data)
+eval/results/validation_*/

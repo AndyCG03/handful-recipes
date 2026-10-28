@@ -1,0 +1,106 @@
+{
+  "generator": "Built-in image_gen",
+  "selected": [
+    {
+      "id": "01-logo-principal-manta",
+      "source": "C:\\Users\\andyc\\.codex\\generated_images\\01a1808b-c55a-7cd3-88e5-26dcdc1f9da0\\exec-04190737-727f-443c-86c8-665c29891ac0.png",
+      "use": "Logo principal sobre fondo manta"
+    },
+    {
+      "id": "02-logo-fondo-cacao",
+      "source": "C:\\Users\\andyc\\.codex\\generated_images\\01a1808b-c55a-7cd3-88e5-26dcdc1f9da0\\exec-647bb5bc-8566-4d22-96c1-672904719485.png",
+      "use": "Logo inverso sobre fondo cacao; fondo opaco"
+    },
+    {
+      "id": "03-logo-monocromo-manta",
+      "source": "C:\\Users\\andyc\\.codex\\generated_images\\01a1808b-c55a-7cd3-88e5-26dcdc1f9da0\\exec-95cf7e8c-c45f-4197-8658-4ed4755c7522.png",
+      "use": "Logo monocromático sobre fondo manta"
+    },
+    {
+      "id": "04-icono-app-barro",
+      "source": "C:\\Users\\andyc\\.codex\\generated_images\\01a1808b-c55a-7cd3-88e5-26dcdc1f9da0\\exec-41e3e5b0-5387-470e-9c07-fff4fcae3a77.png",
+      "use": "Icono de app cuadrado, fondo completo sin esquinas recortadas"
+    },
+    {
+      "id": "05-simbolo-avatar-manta",
+      "source": "C:\\Users\\andyc\\.codex\\generated_images\\01a1808b-c55a-7cd3-88e5-26dcdc1f9da0\\exec-f84f9787-de96-4b41-8c6e-62de2f2043c5.png",
+      "use": "Símbolo independiente y avatar sobre manta"
+    },
+    {
+      "id": "06-patron-semillas-manta",
+      "source": "C:\\Users\\andyc\\.codex\\generated_images\\01a1808b-c55a-7cd3-88e5-26dcdc1f9da0\\exec-4bc12ff1-8648-4c2a-8c4c-4212b15c5281.png",
+      "use": "Patrón decorativo; repetición sin costura no verificada"
+    },
+    {
+      "id": "07-fondo-manta-horizontal",
+      "source": "C:\\Users\\andyc\\.codex\\generated_images\\01a1808b-c55a-7cd3-88e5-26dcdc1f9da0\\exec-ab5b2c07-918e-48ec-80b1-5a4d5c7eeea2.png",
+      "use": "Fondo horizontal con espacio central para contenido"
+    },
+    {
+      "id": "08-portada-demo-horizontal",
+      "source": "C:\\Users\\andyc\\.codex\\generated_images\\01a1808b-c55a-7cd3-88e5-26dcdc1f9da0\\exec-5bc8f6fe-ebb5-45b4-a238-0d820dd26f8e.png",
+      "use": "Portada estática para demo"
+    },
+    {
+      "id": "09-referencia-identidad-aprobada",
+      "source": "C:\\Almacen\\30_proyectos\\activos\\hackathon meta\\docs\\handful-recipes\\images\\01-cuenco-de-barro.png",
+      "use": "Referencia de identidad aprobada; maqueta conceptual"
+    }
+  ],
+  "masterPrompt": "Create the production master LOGO ASSET for the brand \"Handful Recipes\", faithfully extracting and refining ONLY the top-left identity from the supplied approved reference brand board. Output ONE isolated logo on a genuinely TRANSPARENT background PNG, at the highest native resolution and crispest edge quality available. No presentation board, no phone mockups, no paper, no photography, no shadows, no gradients, no texture, no checkerboard drawn into the image, no border, no color palette, no tagline. Preserve the approved identity: terracotta brown #93452F abstract cupped hand/vessel symbol containing three elongated oval seeds, thick smooth organic curves with the distinctive inner curved negative-space cut from the reference. To its right the exact word \"Handful\" in a bold distinctive Fraunces-like soft serif, and directly beneath exact word \"Recipes\" in a clean modern DM Sans-like sans, both in cacao near-black #2D2621. Same two-line wordmark arrangement and harmonious proportions as approved reference. Spell brand EXACTLY Handful Recipes, no additional text. Symbol sits left spanning the height of both lines, optically balanced baseline and professional kerning, even solid fills, perfectly smooth clean silhouettes. Composition wide landscape approximately 2.7:1, logo centered, generous transparent safety margin 12% around all sides. Flat vector-like identity rendered as lossless PNG, designed to work on website and app header. The image should contain only the logo with alpha transparency. Preserve the approved cupped-hand symbol, do not redesign it as chef hat, fork, heart, literal realistic hand, Meta infinity or anything else.",
+  "jobs": [
+    {
+      "id": "02-logo-inverso-transparente",
+      "alpha": true,
+      "prompt": "Edit the reference MASTER logo into its inverse version for a dark background. Preserve exactly its silhouette, type shapes, spacing and two-line \"Handful\" / \"Recipes\" wordmark with symbol at left. Change ONLY colors: symbol warm peach #EBA38B, all lettering cream #F8EEDF. Genuinely transparent background with alpha, generous safety margins, wide horizontal canvas. Only brand words \"Handful Recipes\", no tagline. Highest available native resolution, production-quality lossless PNG, precise clean anti-aliased edges. Faithfully preserve the exact approved cupped hand/vessel and three oval seeds in the reference, including the inner curved negative-space slit. No redesign, no extra fingers, no chef hat, utensils or infinity. Remove any stray edge pixels, speckles or fringe artifacts. Flat solid color where specified, no gradients, bevel, shadow or 3D. No watermark, no mockup, no presentation sheet, no labels or explanatory text."
+    },
+    {
+      "id": "03-logo-monocromo-transparente",
+      "alpha": true,
+      "prompt": "Edit the reference MASTER into a single-color logo. Preserve exact silhouette, type shapes, spacing and two-line \"Handful\" / \"Recipes\" wordmark with symbol at left. ALL visible logo and lettering must be one solid terracotta brown #93452F. Genuinely transparent background with alpha, no other colors, generous safety margins, wide horizontal canvas. Only \"Handful Recipes\". Highest available native resolution, production-quality lossless PNG, precise clean anti-aliased edges. Faithfully preserve the exact approved cupped hand/vessel and three oval seeds in the reference, including the inner curved negative-space slit. No redesign, no extra fingers, no chef hat, utensils or infinity. Remove any stray edge pixels, speckles or fringe artifacts. Flat solid color where specified, no gradients, bevel, shadow or 3D. No watermark, no mockup, no presentation sheet, no labels or explanatory text."
+    },
+    {
+      "id": "04-simbolo-barro-transparente",
+      "alpha": true,
+      "prompt": "Extract ONLY the approved terracotta cupped-hand/vessel symbol from reference master logo. Preserve its exact organic U-shaped outer body, three tilted oval seeds and inner curved negative-space cut. Remove all lettering completely. Center the symbol alone on a square transparent PNG canvas with 18 percent clear margin on every side. One solid color #93452F. This is the definitive standalone brand mark for mobile, favicon, social profile and print. Highest available native resolution, production-quality lossless PNG, precise clean anti-aliased edges. Faithfully preserve the exact approved cupped hand/vessel and three oval seeds in the reference, including the inner curved negative-space slit. No redesign, no extra fingers, no chef hat, utensils or infinity. Remove any stray edge pixels, speckles or fringe artifacts. Flat solid color where specified, no gradients, bevel, shadow or 3D. No watermark, no mockup, no presentation sheet, no labels or explanatory text."
+    },
+    {
+      "id": "05-icono-app-barro",
+      "alpha": false,
+      "prompt": "Create ONE production app icon image for Handful Recipes. Square full-bleed flat background exactly terracotta #93452F. Center the EXACT reference master cupped-palm/vessel symbol with three seeds and curved internal cut, recolored solid warm cream #FCF7EF, taking 62 percent of canvas width with generous clear space. No wordmark or text whatsoever. Canvas itself must remain perfectly square without rounded outside corners (OS applies its own mask). All four corners fully opaque terracotta. No phone, no logo sheet, no outer frame, no shadow, no gradients. Highest available native resolution, production-quality lossless PNG, precise clean anti-aliased edges. Faithfully preserve the exact approved cupped hand/vessel and three oval seeds in the reference, including the inner curved negative-space slit. No redesign, no extra fingers, no chef hat, utensils or infinity. Remove any stray edge pixels, speckles or fringe artifacts. Flat solid color where specified, no gradients, bevel, shadow or 3D. No watermark, no mockup, no presentation sheet, no labels or explanatory text."
+    },
+    {
+      "id": "06-patron-semillas-manta",
+      "alpha": false,
+      "prompt": "Create ONE refined decorative brand pattern PNG for Handful Recipes using approved Cuenco de barro identity. Large square canvas warm manta cream #FCF7EF. Widely spaced tiny organic terracotta #93452F seed trios and very occasional miniature approved cupped-hand symbols, with restrained smaller laurel #47604A leaf sprigs. Airy contemporary editorial rhythm, lots of negative space, subtle natural asymmetry, tiny motifs occupying under 15 percent of area. Artisanal modern Mexican family recipe feeling without folkloric motifs. No text, no dishes, no photo, no real hands, no watermark. Flat graphic quality, sharp clean motifs, no excessive grain. It is decorative background artwork, not a UI screenshot. Highest native resolution."
+    },
+    {
+      "id": "07-fondo-manta-horizontal",
+      "alpha": false,
+      "prompt": "Create ONE premium clean brand background PNG for Handful Recipes, landscape 16:9, highest native resolution available. Warm off-white manta #FCF7EF dominates, subtle fine natural linen/paper fiber texture without stains, elegant barely visible craft tactility. A single restrained sweeping terracotta #93452F curve inspired by approved cupped-hand logo enters only at far bottom-left and three small separated seed shapes sit near bottom-right; minute laurel-green #47604A detail at lower edge. Center and upper 80 percent intentionally empty for placing future text and video. Sophisticated warm modern digital product identity, not vintage recipe paper, no distressed edges, no text, no logos, no kitchen props, no shadows or fake mockup."
+    },
+    {
+      "id": "08-portada-demo-horizontal",
+      "alpha": false,
+      "prompt": "Create ONE finished landscape 16:9 title-card PNG for Handful Recipes preserving approved Cuenco de barro identity. Highest native resolution. Premium minimal editorial layout on warm manta #FCF7EF. Left third holds exact approved terracotta cupped-palm symbol and exact two-line brand wordmark Handful Recipes in cacao #2D2621. Main large elegant soft bold serif headline placed on right two-thirds, exactly: \"Some recipes were never written.\" Below it, smaller clean sans exact line \"Family recipes. In their own words.\" Clear strong typography, deliberate kerning, beautiful whitespace and safe margins 9 percent. One restrained terracotta arc near bottom and three seeds, minimal visual motifs. No photos, no mockups, no palette chips, no extra labels. Not a slide explaining branding: an actual usable video opening card. Flat clean colors and perfect readable typography."
+    },
+    {
+      "id": "09-avatar-manta",
+      "alpha": false,
+      "prompt": "Create ONE square social profile avatar PNG for Handful Recipes with a warm manta cream #FCF7EF fully opaque background and the EXACT approved terracotta #93452F cupped-palm symbol from the reference, centered, large but with 22 percent safety margins for circular cropping. Symbol contains exactly three oval seeds and approved inner curved negative-space slit. No text, no wordmark, no border, no corners rounded in image, no shadow, no gradient, no realistic objects. Highest native resolution and crisp flat solid shapes. Highest available native resolution, production-quality lossless PNG, precise clean anti-aliased edges. Faithfully preserve the exact approved cupped hand/vessel and three oval seeds in the reference, including the inner curved negative-space slit. No redesign, no extra fingers, no chef hat, utensils or infinity. Remove any stray edge pixels, speckles or fringe artifacts. Flat solid color where specified, no gradients, bevel, shadow or 3D. No watermark, no mockup, no presentation sheet, no labels or explanatory text."
+    }
+  ],
+  "opaqueLogos": [
+    {
+      "id": "01-logo-principal-manta",
+      "prompt": "Using the approved brand board, recreate ONLY the top-left Handful Recipes logo as an immaculate production PNG. Symbol left: EXACT approved thick curved cupped-hand/vessel and three oval seeds with inner curved slit; same distinctive silhouette, no redesign. Two-line wordmark to right: exact \"Handful\" in bold soft expressive serif, exact \"Recipes\" in clean modern sans. Professional kerning and same approved proportions. Wide horizontal composition, logo width about 78 percent of canvas and generous margins, centered. Highest native resolution possible; aim for a large 4K-wide asset if supported. Perfectly smooth clean flat shapes, no texture, no distressed edge, no gradients, no shadows, no mockup or brand board. No additional text. Fully opaque solid warm cream background #FCF7EF, symbol solid terracotta brown #93452F, lettering solid dark cacao #2D2621."
+    },
+    {
+      "id": "03-logo-monocromo-manta",
+      "prompt": "Using the approved brand board, recreate ONLY the top-left Handful Recipes logo as an immaculate production PNG. Symbol left: EXACT approved thick curved cupped-hand/vessel and three oval seeds with inner curved slit; same distinctive silhouette, no redesign. Two-line wordmark to right: exact \"Handful\" in bold soft expressive serif, exact \"Recipes\" in clean modern sans. Professional kerning and same approved proportions. Wide horizontal composition, logo width about 78 percent of canvas and generous margins, centered. Highest native resolution possible; aim for a large 4K-wide asset if supported. Perfectly smooth clean flat shapes, no texture, no distressed edge, no gradients, no shadows, no mockup or brand board. No additional text. Fully opaque solid warm cream background #FCF7EF, ALL logo shapes and BOTH lines of lettering one flat solid terracotta brown #93452F. No near-black lettering."
+    }
+  ],
+  "darkCorrectedPrompt": "Production graphic design, ONE logo PNG asset for \"Handful Recipes\". Recreate the approved top-left brand mark and typography from the reference board, isolated cleanly. Ignore all phones/photos/colorsheets. Exact mark is a cupped U-shaped organic palm/vessel with three oval seeds and one sweeping interior negative-space cut. Layout: mark on left, exact word \"Handful\" in bold soft-serif above exact word \"Recipes\" in modern sans on right, identical brand proportions to reference. Color of mark soft terracotta peach #EBA38B, letters warm cream #F8EEDF. Background solid dark cacao #211C19, fully opaque, full bleed. Flat smooth solid fills and pristine edges with no holes or speckles in letters, no distress, no grain, no outlines, no shadows, no gradients. Highest native quality resolution, wide horizontal composition 2.7:1, ample clear margin on all sides. No extra words, no branding board, no texture, no checkerboard. This is the ready-to-use dark-background logo asset.",
+  "inverseCleanupPrompt": "Remove ONLY the solid dark brown background from the supplied finished Handful Recipes logo, leaving the logo's peach cupped-hand symbol and cream \"Handful Recipes\" lettering exactly unchanged. Preserve all shapes, spacing, edges, letter interiors and layout. Output a genuine transparent-background PNG with smooth precise alpha boundaries, no black matte, no stray dots, no jagged white noise or fringes. Keep the full resolution and safety margins. No redesign, no new text, no texture. This is exact background removal for a clean brand logo.",
+  "note": "Los intentos transparentes se descartaron por defectos de borde. Solo PNG con fondo opaco en el kit final. Resolución nativa, sin ampliar artificialmente."
+}

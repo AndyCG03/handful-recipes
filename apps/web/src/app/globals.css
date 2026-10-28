@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+/* Identity "Cuenco de barro" — docs/handful-recipes/IDENTIDAD_VISUAL.md
+   All declared pairs pass WCAG AA (docs/handful-recipes/contrast-wcag.csv). */
+:root {
+  --barro: #93452f; /* primary: main actions */
+  --laurel: #47604a; /* secondary: metadata, navigation */
+  --comal: #7a5521; /* accent: small emphasis only */
+  --manta: #fcf7ef; /* background; also label on primary buttons */
+  --cacao: #2d2621; /* text */
+  --ciruela: #725276; /* pending question state (always with icon + text) */
+  --surface: #ffffff;
+  --line: color-mix(in srgb, var(--cacao) 14%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --barro: #eba38b;
+    --laurel: #a9c7ac;
+    --comal: #e2be7d;
+    --manta: #211c19;
+    --cacao: #f8eedf;
+    --ciruela: #d8b3dc;
+    --surface: #2a2420;
+    --line: color-mix(in srgb, var(--cacao) 18%, transparent);
+  }
+}
+
+@theme inline {
+  --color-barro: var(--barro);
+  --color-laurel: var(--laurel);
+  --color-comal: var(--comal);
+  --color-manta: var(--manta);
+  --color-cacao: var(--cacao);
+  --color-ciruela: var(--ciruela);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-dm-sans);
+}
+
+html {
+  background: var(--manta);
+  color: var(--cacao);
+}
+
+body {
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-size: 18px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 3px solid var(--barro);
+  outline-offset: 2px;
+}
+
+/* Tailwind v4: reusable classes are declared with @utility so they can be composed. */
+@utility btn {
+  @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+}
+/* Primary button uses the background colour as its label (identity rule). */
+@utility btn-primary {
+  @apply btn bg-barro text-manta hover:opacity-90;
+}
+@utility btn-secondary {
+  @apply btn border-2 border-barro text-barro hover:bg-barro/10;
+}
+@utility btn-ghost {
+  @apply btn text-laurel underline-offset-4 hover:underline;
+}
+@utility card {
+  @apply rounded-3xl border border-line bg-surface p-5;
+}
+@utility field {
+  @apply min-h-12 w-full rounded-2xl border-2 border-line bg-surface px-4 text-cacao focus:border-barro focus:outline-none;
+}
+@utility label {
+  @apply mb-1 block font-medium;
+}
+@utility meta {
+  @apply text-base text-laurel;
+}

@@ -1,0 +1,170 @@
+[
+  {
+    "id": "barro",
+    "name": "Cuenco de barro",
+    "line": "Lo que cabe en una mano puede guardar una historia.",
+    "titlefont": "Fraunces",
+    "bodyfont": "DM Sans",
+    "idea": "Nace del hueco de una mano al recoger un puñito y de los recipientes de uso diario. El gesto de contener une la medida informal con la conservación de una historia. La textura se reserva para portadas; la interfaz permanece limpia.",
+    "logo": "En una retícula de 24 unidades, una curva abierta va de (5,11) a (19,11) pasando por una base en y=20. Dentro, tres óvalos sólidos de 2×3 unidades, escalonados, evocan ingredientes en una palma. Trazo de 2 unidades y extremos redondos. Sin dedos detallados ni utensilios. Handful en Fraunces semibold y Recipes debajo en DM Sans medium. El símbolo solo, sobre cuadrado de esquinas amplias, forma el ícono; comprobarlo a 48 y 24 px.",
+    "typography": "Fraunces 600 da una voz orgánica y contemporánea a títulos cortos; DM Sans 400/500 mantiene pasos, preguntas y controles claros. No usar serif en instrucciones pequeñas ni pesos finos.",
+    "screen": "Video de la mano al centro, título amplio y pasos en bloques generosos. Cada paso incluye una referencia temporal visible. Las medidas informales se abren como una imagen del gesto, sin conversión numérica. Botón de grabación en barro; preguntas en ciruela con icono y texto.",
+    "demo": "Fondo de manta, símbolo en barro y título grande: “Some recipes were never written.” Debajo, Handful Recipes. Un recorte amplio del gesto de un puñito aporta el vínculo con el producto; el texto va en un área sólida separada del video.",
+    "risk": "Puede parecer marca de cerámica o restaurante si domina el cuenco. Mantener cerca el lenguaje de clips, familia y memoria; evitar superficies envejecidas y ornamentos rústicos.",
+    "copy": [
+      "Record a family recipe",
+      "One detail to ask: how do you know it’s ready?",
+      "Your family’s first recipe starts with a conversation."
+    ],
+    "colors": [
+      "Barro cocido",
+      "Hoja de laurel",
+      "Comal dorado",
+      "Manta",
+      "Tinta de cacao",
+      "Ciruela por preguntar"
+    ],
+    "light": {
+      "primary": "#93452F",
+      "secondary": "#47604A",
+      "accent": "#7A5521",
+      "bg": "#FCF7EF",
+      "text": "#2D2621",
+      "pending": "#725276"
+    },
+    "dark": {
+      "primary": "#EBA38B",
+      "secondary": "#A9C7AC",
+      "accent": "#E2BE7D",
+      "bg": "#211C19",
+      "text": "#F8EEDF",
+      "pending": "#D8B3DC"
+    }
+  },
+  {
+    "id": "archivo",
+    "name": "Archivo de sobremesa",
+    "line": "La voz también se hereda.",
+    "titlefont": "Source Serif 4",
+    "bodyfont": "Source Sans 3",
+    "idea": "Parte de los recetarios con anotaciones y las fotografías familiares. Un puñito se conserva como evidencia visual junto a la voz de quien lo usa. El archivo se siente vivo: tiene personas, preguntas y continuidad, no solo documentos.",
+    "logo": "Símbolo en retícula de 24: dos hojas superpuestas, la posterior desplazada 3 unidades arriba y a la derecha. La hoja frontal es un rectángulo de 13×16 con esquinas de 2; tres cápsulas cortas dentro evocan anotaciones e ingredientes. Una esquina superior queda abierta como detalle propio. Trazo de 2 unidades. Wordmark en Source Serif 4 semibold con Recipes en Source Sans 3. A 48 px se mantiene una hoja y tres marcas; la segunda hoja se simplifica a un ángulo.",
+    "typography": "Source Serif 4 600 aporta el ritmo editorial de un recetario, mientras Source Sans 3 400/600 hace legibles listas y controles. La relación entre ambas evita mezclar demasiadas voces.",
+    "screen": "Cabecera con nombre de la receta, persona que la comparte y fecha de la grabación. Video tratado como pieza principal del archivo. Los pasos aparecen como fichas numeradas con acceso al clip; preguntas y respuestas forman un historial familiar.",
+    "demo": "Composición editorial con margen ancho, una fotografía familiar autorizada a un lado y el título “Keep the recipe. Keep the voice.” sobre papel claro. Número de receta y nombre de la persona dan carácter documental.",
+    "risk": "Puede sentirse demasiado solemne o parecido a una biblioteca. Usar imágenes actuales, acciones visibles y espacio para nuevas respuestas; evitar cursivas manuscritas difíciles de leer.",
+    "copy": [
+      "Save their way of cooking",
+      "A little more to remember: what goes in next?",
+      "A place for the recipes only your family knows."
+    ],
+    "colors": [
+      "Tinta de mora",
+      "Salvia de patio",
+      "Lacre",
+      "Papel de casa",
+      "Grafito",
+      "Mostaza de nota"
+    ],
+    "light": {
+      "primary": "#554275",
+      "secondary": "#52645A",
+      "accent": "#8D493B",
+      "bg": "#FAF8F3",
+      "text": "#282431",
+      "pending": "#7B5B19"
+    },
+    "dark": {
+      "primary": "#C8B5E9",
+      "secondary": "#B6CDBD",
+      "accent": "#EEB3A2",
+      "bg": "#201D26",
+      "text": "#F2EDF7",
+      "pending": "#EAC77F"
+    }
+  },
+  {
+    "id": "frontera",
+    "name": "Luz de frontera",
+    "line": "De esta cocina, para donde esté tu familia.",
+    "titlefont": "Bricolage Grotesque",
+    "bodyfont": "DM Sans",
+    "idea": "Nace de la luz baja sobre el adobe y de familias cuya cocina viaja entre ciudades e idiomas. La mano se convierte en paisaje: un arco bajo contiene tres semillas. El origen norteño se expresa mediante luz y proporciones, sin iconografía turística ni banderas.",
+    "logo": "En 24×24, un arco de (5,14) a (19,14) con cima en y=6 queda apoyado sobre una línea horizontal en y=18; tres semillas ovales se sitúan entre arco y línea. Trazo de 2 unidades y extremos redondos. El arco sugiere palma y horizonte. Handful en Bricolage Grotesque 600, Recipes en DM Sans 500. Ícono con símbolo único a 48 px, sin paisaje detallado ni degradado.",
+    "typography": "Bricolage Grotesque 600 da personalidad en una portada breve; DM Sans estabiliza lectura y uso cotidiano. La expresividad se concentra en títulos, conservando altura cómoda y tamaño generoso en instrucciones.",
+    "screen": "Encuadres horizontales de manos e ingredientes, título compacto y navegación bilingüe opcional según preferencia explícita. Los tiempos de clip se distinguen con verde mezquite; preguntas en violeta con etiqueta. Sin traducción automática que sustituya la voz original.",
+    "demo": "Plano dividido entre fondo adobe claro y una captura auténtica del video familiar. Título en vino: “A handful of home.” Una línea de horizonte organiza la composición; la marca queda legible incluso en miniatura.",
+    "risk": "Puede limitarse visualmente al norte de México o convertirse en marca de viajes. Dar protagonismo a historias familiares diversas y usar el paisaje como estructura discreta, no como tema de cada pantalla.",
+    "copy": [
+      "Bring a recipe home",
+      "Ask them: what does “a handful” look like?",
+      "Home has a flavor. Start saving yours."
+    ],
+    "colors": [
+      "Vino del ocaso",
+      "Mezquite",
+      "Cobre de tarde",
+      "Adobe de luz",
+      "Sombra del patio",
+      "Violeta de pregunta"
+    ],
+    "light": {
+      "primary": "#773C52",
+      "secondary": "#52613A",
+      "accent": "#9B4726",
+      "bg": "#FFF8EE",
+      "text": "#30262B",
+      "pending": "#665198"
+    },
+    "dark": {
+      "primary": "#E8A2B7",
+      "secondary": "#B6C991",
+      "accent": "#F6B28B",
+      "bg": "#241D25",
+      "text": "#FFF1E3",
+      "pending": "#C7B5F1"
+    }
+  },
+  {
+    "id": "minima",
+    "name": "El gesto esencial",
+    "line": "Cada paso conserva su origen.",
+    "titlefont": "Manrope",
+    "bodyfont": "DM Sans",
+    "idea": "Parte de un puñito como unidad humana: algo concreto que no necesita fingir exactitud. Cinco módulos se reúnen en una sola figura, como ingredientes, clips y recuerdos que se vuelven una receta. Tecnología discreta con evidencia a la vista.",
+    "logo": "Símbolo de cinco módulos sólidos en retícula 24: tres cápsulas verticales de ancho 3 en x=5,10,15, escalonadas en altura; una curva ancha inferior las recoge y una cápsula corta oblicua marca el pulgar. Construir como silueta de una mano recogida, con separaciones mínimas de 2 unidades. Sin líneas interiores. Wordmark Manrope 650; Recipes en DM Sans 500. A 48 px se conservan cinco módulos; a 24 se funden las dos piezas inferiores en una base.",
+    "typography": "Manrope 600/650 ofrece títulos nítidos y una marca compacta; DM Sans 400/500 aporta familiaridad a lectura larga y mensajes. La diferencia entre fuentes es sutil: el peso, espacio y tamaño sostienen la jerarquía.",
+    "screen": "Tarjetas simples, video grande y un paso activo con vínculo al segundo exacto de la grabación. Una etiqueta expresa “Shown in the video” o “Ask your family”. La información inferida nunca se presenta como medida confirmada.",
+    "demo": "Fondo marfil, símbolo verde y gran título “Family recipes, with every step remembered.” Tres bloques estáticos muestran video, paso y pregunta. La marca deja claro el producto antes de introducir modelos o arquitectura.",
+    "risk": "Puede parecer una app de notas o productividad. El gesto de la mano, la voz original y fotografías familiares deben aportar identidad; evitar interfaces excesivamente clínicas.",
+    "copy": [
+      "Start a recipe recording",
+      "One question for your family",
+      "Your first family recipe belongs here."
+    ],
+    "colors": [
+      "Verde de casa",
+      "Hilo malva",
+      "Canela",
+      "Marfil fresco",
+      "Tinta de hoja",
+      "Ámbar de conversación"
+    ],
+    "light": {
+      "primary": "#245D56",
+      "secondary": "#62516D",
+      "accent": "#8B4931",
+      "bg": "#F5F8F4",
+      "text": "#20312D",
+      "pending": "#785B1F"
+    },
+    "dark": {
+      "primary": "#91CABB",
+      "secondary": "#C9B5D4",
+      "accent": "#EDB49B",
+      "bg": "#172622",
+      "text": "#EAF3EB",
+      "pending": "#E3C17A"
+    }
+  }
+]

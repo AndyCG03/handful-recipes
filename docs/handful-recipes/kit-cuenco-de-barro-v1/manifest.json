@@ -1,0 +1,92 @@
+[
+  {
+    "file": "01-logo-principal-manta.png",
+    "width": 1942,
+    "height": 809,
+    "format": "PNG",
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "bytes": 1145712,
+    "use": "Logo principal sobre fondo manta"
+  },
+  {
+    "file": "02-logo-fondo-cacao.png",
+    "width": 2060,
+    "height": 763,
+    "format": "PNG",
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "bytes": 1280079,
+    "use": "Logo inverso sobre fondo cacao; fondo opaco"
+  },
+  {
+    "file": "03-logo-monocromo-manta.png",
+    "width": 1942,
+    "height": 809,
+    "format": "PNG",
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "bytes": 1200762,
+    "use": "Logo monocromático sobre fondo manta"
+  },
+  {
+    "file": "04-icono-app-barro.png",
+    "width": 1254,
+    "height": 1254,
+    "format": "PNG",
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "bytes": 1211445,
+    "use": "Icono de app cuadrado, fondo completo sin esquinas recortadas"
+  },
+  {
+    "file": "05-simbolo-avatar-manta.png",
+    "width": 1254,
+    "height": 1254,
+    "format": "PNG",
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "bytes": 1155441,
+    "use": "Símbolo independiente y avatar sobre manta"
+  },
+  {
+    "file": "06-patron-semillas-manta.png",
+    "width": 1254,
+    "height": 1254,
+    "format": "PNG",
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "bytes": 1224809,
+    "use": "Patrón decorativo; repetición sin costura no verificada"
+  },
+  {
+    "file": "07-fondo-manta-horizontal.png",
+    "width": 1672,
+    "height": 941,
+    "format": "PNG",
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "bytes": 1974776,
+    "use": "Fondo horizontal con espacio central para contenido"
+  },
+  {
+    "file": "08-portada-demo-horizontal.png",
+    "width": 1672,
+    "height": 941,
+    "format": "PNG",
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "bytes": 1268293,
+    "use": "Portada estática para demo"
+  },
+  {
+    "file": "09-referencia-identidad-aprobada.png",
+    "width": 1536,
+    "height": 1024,
+    "format": "PNG",
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "bytes": 2138560,
+    "use": "Referencia de identidad aprobada; maqueta conceptual"
+  }
+]
