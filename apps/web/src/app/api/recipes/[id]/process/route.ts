@@ -1,9 +1,10 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { toOwner } from "@/lib/domain";
-import { EDIT_KEY_HEADER, errorResponse, json } from "@/lib/server/http";
+import { errorResponse, json } from "@/lib/server/http";
 import { stageAnalyze, stageHandful, stageTranscribe } from "@/lib/server/pipeline";
 import { getRecipe, isOwner, saveRecipe } from "@/lib/server/recipes";
+import { isJobActive } from "@/lib/processing";
 
 export const maxDuration = 300;
 
@@ -19,7 +20,8 @@ const Body = z.discriminatedUnion("stage", [
 export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const recipe = await getRecipe((await ctx.params).id);
   if (!recipe) return json({ error: "Not found" }, 404);
-  if (!isOwner(recipe, req.headers.get(EDIT_KEY_HEADER))) return json({ error: "Forbidden" }, 403);
+  if (!await isOwner(recipe)) return json({ error: "Forbidden" }, 403);
+  if (isJobActive(recipe.job)) return json({ error: "This recipe is already processing in the background." }, 409);
 
   try {
     const body = Body.parse(await req.json());

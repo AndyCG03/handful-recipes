@@ -103,12 +103,23 @@ export async function stageHandful(recipe: Recipe, frames: HandfulFrame[]): Prom
   recipe.status = "ready";
 }
 
-export async function answerGap(recipe: Recipe, gapId: string, audioUrl: string): Promise<Gap> {
+export async function answerGap(recipe: Recipe, gapId: string, audioUrl: string, author: "owner" | "cook" = "cook"): Promise<Gap> {
   const gap = recipe.gaps.find((g) => g.id === gapId);
   if (!gap) throw new Error("Question not found");
   const wav = await readBytes(audioUrl);
   const tr = await recordRun(recipe, "answer.transcribe", MODELS.transcribe, () => transcribe(wav, { mode: "PUSH_TO_TALK" }));
   const text = tr.transcript.trim();
+  return mergeGapAnswer(recipe, gapId, text, audioUrl, author);
+}
+
+export async function answerGapText(recipe: Recipe, gapId: string, text: string): Promise<Gap> {
+  return mergeGapAnswer(recipe, gapId, text.trim(), null, "owner");
+}
+
+async function mergeGapAnswer(recipe: Recipe, gapId: string, text: string, audioUrl: string | null, author: "owner" | "cook"): Promise<Gap> {
+  const gap = recipe.gaps.find((g) => g.id === gapId);
+  if (!gap) throw new Error("Question not found");
+  if (!text) throw new Error("No answer was detected. Please record again or write your answer.");
   const step = recipe.steps.find((s) => s.id === gap.stepId);
 
   let merged = { note: text, resolved: text.length > 0 };
@@ -116,7 +127,7 @@ export async function answerGap(recipe: Recipe, gapId: string, audioUrl: string)
     const raw = await recordRun(recipe, "answer.merge", MODELS.spark, () =>
       sparkJson({
         content: [
-          { type: "input_text", text: mergePrompt({ cookName: recipe.cookName, question: gap.question, stepAction: step?.action ?? null, answer: text }) },
+          { type: "input_text", text: mergePrompt({ cookName: author === "owner" ? "the person recording the recipe" : recipe.cookName, question: gap.question, stepAction: step?.action ?? null, answer: text }) },
         ],
         schemaName: "answer_merge",
         schema: MERGE_SCHEMA,
@@ -126,7 +137,21 @@ export async function answerGap(recipe: Recipe, gapId: string, audioUrl: string)
     merged = MergeOut.parse(raw);
   }
 
-  gap.answer = { audioUrl, transcript: text, note: merged.note, resolved: merged.resolved, answeredAt: new Date().toISOString() };
-  gap.status = "answered";
+  gap.answer = { audioUrl, transcript: text, note: merged.note, resolved: merged.resolved, answeredAt: new Date().toISOString(), author };
+  // An unclear reply is evidence, but does not close the question.
+  gap.status = merged.resolved ? "answered" : gap.status === "sent" ? "sent" : "open";
   return gap;
+}
+
+/** Use only samples captured inside the step, never label another moment as its evidence. */
+export async function stageHandfulFromSamples(recipe: Recipe): Promise<void> {
+  const frames: HandfulFrame[] = [];
+  for (const step of recipe.steps.filter((s) => s.handful).slice(0, 6)) {
+    const middle = (step.startSec + step.endSec) / 2;
+    const sample = recipe.sampleFrames
+      .filter((f) => f.frameSec >= step.startSec && f.frameSec <= step.endSec)
+      .sort((a, b) => Math.abs(a.frameSec - middle) - Math.abs(b.frameSec - middle))[0];
+    if (sample) frames.push({ ...sample, stepId: step.id });
+  }
+  await stageHandful(recipe, frames);
 }

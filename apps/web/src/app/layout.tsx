@@ -25,7 +25,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" className={`${fraunces.variable} ${dmSans.variable}`}>
       <body className="min-h-dvh">
         <SiteHeader />
-        <main className="mx-auto w-full max-w-2xl px-4 pb-16">{children}</main>
+        <main className="mx-auto w-full max-w-6xl px-5 pb-16 sm:px-8">{children}</main>
       </body>
     </html>
   );

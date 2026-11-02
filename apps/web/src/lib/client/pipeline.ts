@@ -10,7 +10,6 @@ export type PipelineProgress = { label: string; done: number; total: number };
  */
 export async function runPipeline(
   recipe: OwnerRecipe,
-  editKey: string,
   videoSrc: string,
   onProgress: (p: PipelineProgress) => void,
 ): Promise<OwnerRecipe> {
@@ -19,11 +18,11 @@ export async function runPipeline(
 
   if (r.status === "uploaded" || (r.status === "failed" && r.transcript.length === 0 && r.steps.length === 0)) {
     onProgress({ label: "Listening to the voices", done: 0, total });
-    r = (await runStage(r.id, editKey, "transcribe")).recipe;
+    r = (await runStage(r.id, "transcribe")).recipe;
   }
   if (r.status === "transcribed" || (r.status === "failed" && r.steps.length === 0)) {
     onProgress({ label: "Watching the hands, step by step", done: 1, total });
-    r = (await runStage(r.id, editKey, "analyze")).recipe;
+    r = (await runStage(r.id, "analyze")).recipe;
   }
   if (r.status === "analyzed" || r.status === "failed") {
     onProgress({ label: "Finding each handful", done: 2, total });
@@ -37,7 +36,7 @@ export async function runPipeline(
         frameUrl: await uploadFile(blob, `${r.id}/frames/${targets[i].id}.jpg`),
       })),
     );
-    r = (await runStage(r.id, editKey, "handful", uploaded)).recipe;
+    r = (await runStage(r.id, "handful", uploaded)).recipe;
   }
   onProgress({ label: "Ready", done: total, total });
   return r;

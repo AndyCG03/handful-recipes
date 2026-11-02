@@ -31,7 +31,7 @@ export function AskPage({ token }: { token: string }) {
   const pending = view.questions.filter((q) => !q.answered);
 
   return (
-    <div className="space-y-6 pt-4 text-xl">
+    <div className="mx-auto max-w-2xl space-y-6 pt-4 text-xl">
       <header className="space-y-2">
         <h1 className="font-display text-4xl">Hola, {view.cookName}</h1>
         <p>
@@ -74,10 +74,12 @@ function QuestionCard({
     setError(null);
     try {
       const wav = await toWav(blob);
-      const url = await uploadFile(wav, `answers/${token}/${question.id}-${Date.now()}.wav`);
+      const url = await uploadFile(wav, `answers/${token}/${question.id}-${Date.now()}.wav`, undefined, token);
       onAnswered(await answerQuestion(token, question.id, url));
     } catch (e) {
       setError(e instanceof Error ? e.message : "No se pudo enviar. Intenta otra vez.");
+      setSending(false);
+    } finally {
       setSending(false);
     }
   }

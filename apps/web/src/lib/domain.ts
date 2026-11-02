@@ -53,11 +53,12 @@ export const GapStatus = z.enum(["open", "sent", "answered", "dismissed"]);
 export type GapStatus = z.infer<typeof GapStatus>;
 
 export const Answer = z.object({
-  audioUrl: z.string(),
+  audioUrl: z.string().nullable(),
   transcript: z.string(),
   note: z.string(), // concise statement placed on the step, in the cook's words
   resolved: z.boolean(),
   answeredAt: z.string(),
+  author: z.enum(["cook", "owner"]).default("cook"),
 });
 export type Answer = z.infer<typeof Answer>;
 
@@ -82,6 +83,17 @@ export const ModelRun = z.object({
 });
 export type ModelRun = z.infer<typeof ModelRun>;
 
+export const SampleFrame = z.object({ frameUrl: z.string().min(1), frameSec: z.number().nonnegative() });
+export const BackgroundJob = z.object({
+  id: z.string(),
+  status: z.enum(["queued", "running", "completed", "failed"]),
+  stage: z.enum(["transcribe", "analyze", "handful"]),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  error: z.string().nullable(),
+});
+export type BackgroundJob = z.infer<typeof BackgroundJob>;
+
 export const Recipe = z.object({
   id: z.string(),
   title: z.string(),
@@ -97,27 +109,29 @@ export const Recipe = z.object({
   steps: z.array(Step),
   gaps: z.array(Gap),
   runs: z.array(ModelRun),
-  /** sha256 of the owner's edit key; never sent to clients */
-  editKeyHash: z.string(),
+  sampleFrames: z.array(SampleFrame).default([]),
+  job: BackgroundJob.nullable().default(null),
+  /** Supabase Auth user id of the creator; never sent to clients */
+  ownerId: z.string(),
   /** token for the answer page shared with the cook */
   askToken: z.string(),
 });
 export type Recipe = z.infer<typeof Recipe>;
 
 /** What anyone with the share link sees. */
-export type PublicRecipe = Omit<Recipe, "editKeyHash" | "askToken" | "runs">;
+export type PublicRecipe = Omit<Recipe, "ownerId" | "askToken" | "runs" | "sampleFrames" | "job">;
 /** What the owner sees. */
-export type OwnerRecipe = Omit<Recipe, "editKeyHash">;
+export type OwnerRecipe = Omit<Recipe, "ownerId">;
 
 export function toPublic(r: Recipe): PublicRecipe {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { editKeyHash, askToken, runs, ...rest } = r;
+  const { ownerId, askToken, runs, sampleFrames, job, ...rest } = r;
   return rest;
 }
 
 export function toOwner(r: Recipe): OwnerRecipe {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { editKeyHash, ...rest } = r;
+  const { ownerId, ...rest } = r;
   return rest;
 }
 
@@ -136,7 +150,8 @@ export const CreateRecipeInput = z.object({
   cookName: z.string().trim().min(1).max(60),
   videoUrl: z.string().min(1),
   audioUrl: z.string().min(1),
-  durationSec: z.number().positive().max(15 * 60),
+  durationSec: z.number().positive().max(10 * 60),
+  sampleFrames: z.array(SampleFrame).max(24).default([]),
   consent: z.literal(true),
 });
 export type CreateRecipeInput = z.infer<typeof CreateRecipeInput>;

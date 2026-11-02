@@ -3,16 +3,16 @@
 import { useRouter } from "next/navigation";
 import { useId, useState } from "react";
 import { MAX_VIDEO_SECONDS } from "@/lib/domain";
-import { createRecipe, uploadFile } from "@/lib/client/api";
-import { toWav, videoDuration } from "@/lib/client/media";
-import { rememberOwned } from "@/lib/client/owner";
-import { runPipeline, type PipelineProgress } from "@/lib/client/pipeline";
+import { createRecipe, startBackground, uploadFile } from "@/lib/client/api";
+import { captureFrames, sampleTimes, toWav, videoDuration } from "@/lib/client/media";
+import { type PipelineProgress } from "@/lib/client/pipeline";
 import { ProgressPanel } from "@/components/ProgressPanel";
 
 export function NewRecipeForm() {
   const router = useRouter();
   const ids = { title: useId(), cook: useId(), video: useId(), consent: useId() };
   const [file, setFile] = useState<File | null>(null);
+  const [captureMode, setCaptureMode] = useState<"upload" | "record">("upload");
   const [title, setTitle] = useState("");
   const [cookName, setCookName] = useState("");
   const [consent, setConsent] = useState(false);
@@ -30,9 +30,14 @@ export function NewRecipeForm() {
       setProgress({ label: "Checking the video", done: 0, total: 5 });
       const duration = await videoDuration(file);
       if (duration > MAX_VIDEO_SECONDS) throw new Error("Please use a video of 10 minutes or less.");
+      if (!Number.isFinite(duration) || duration <= 0) throw new Error("We couldn't read this video's duration. Try exporting it as MP4.");
 
       setProgress({ label: "Preparing the audio", done: 0, total: 5 });
       const wav = await toWav(file);
+
+      setProgress({ label: "Preparing visual moments", done: 1, total: 5 });
+      const seconds = sampleTimes(duration);
+      const frames = await captureFrames(objectUrl, seconds);
 
       const stamp = Date.now();
       const ext = file.type === "video/quicktime" ? "mov" : "mp4";
@@ -41,12 +46,20 @@ export function NewRecipeForm() {
         uploadFile(file, `${stamp}/video.${ext}`, (pct) => setProgress({ label: `Uploading the video · ${Math.round(pct)}%`, done: 1, total: 5 })),
         uploadFile(wav, `${stamp}/audio.wav`),
       ]);
+      setProgress({ label: "Saving the visual moments", done: 3, total: 5 });
+      const sampleFrames: Array<{ frameUrl: string; frameSec: number }> = [];
+      // Bound upload concurrency on mobile rather than uploading 24 frames at once.
+      for (let i = 0; i < frames.length; i += 3) {
+        sampleFrames.push(...await Promise.all(frames.slice(i, i + 3).map(async (frame, offset) => ({
+          frameSec: seconds[i + offset], frameUrl: await uploadFile(frame, `${stamp}/samples/${i + offset}.jpg`),
+        }))));
+      }
 
-      const { recipe, editKey } = await createRecipe({ title, cookName, videoUrl, audioUrl, durationSec: duration, consent: true });
-      rememberOwned({ id: recipe.id, editKey, title: recipe.title, cookName: recipe.cookName, createdAt: recipe.createdAt });
+      const { recipe } = await createRecipe({ title, cookName, videoUrl, audioUrl, durationSec: duration, sampleFrames, consent: true });
       createdId = recipe.id;
 
-      await runPipeline(recipe, editKey, objectUrl, (p) => setProgress({ label: p.label, done: 2 + p.done, total: 5 }));
+      setProgress({ label: "Starting your draft in the background", done: 4, total: 5 });
+      await startBackground(recipe.id);
       router.push(`/recipes/${recipe.id}`);
     } catch (err) {
       // Once the recipe exists, resume from its page instead of uploading a duplicate.
@@ -63,6 +76,10 @@ export function NewRecipeForm() {
 
   return (
     <form onSubmit={submit} className="space-y-5">
+      <div className="grid grid-cols-2 gap-2" aria-label="Choose how to add your video">
+        <button type="button" aria-pressed={captureMode === "upload"} className={captureMode === "upload" ? "btn-primary" : "btn-secondary"} onClick={() => { setCaptureMode("upload"); if (captureMode !== "upload") setFile(null); }}>Upload a video</button>
+        <button type="button" aria-pressed={captureMode === "record"} className={captureMode === "record" ? "btn-primary" : "btn-secondary"} onClick={() => { setCaptureMode("record"); if (captureMode !== "record") setFile(null); }}>Use my camera</button>
+      </div>
       <div>
         <label htmlFor={ids.video} className="label">
           Video
@@ -71,6 +88,8 @@ export function NewRecipeForm() {
           id={ids.video}
           type="file"
           accept="video/mp4,video/quicktime,video/*"
+          capture={captureMode === "record" ? "environment" : undefined}
+          key={captureMode}
           required
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
           className="field py-3 file:mr-4 file:rounded-full file:border-0 file:bg-barro file:px-4 file:py-2 file:text-manta"
@@ -97,7 +116,7 @@ export function NewRecipeForm() {
       <button type="submit" className="btn-primary w-full" disabled={!file || !consent || busy}>
         Create the recipe
       </button>
-      <p className="meta">The video is processed with Meta AI models (speech, video understanding and segmentation).</p>
+      <p className="meta">Keep this page open while the files upload. Once saved, your draft processes on the server and you can leave the page. You can answer its questions yourself or invite your family.</p>
     </form>
   );
 }

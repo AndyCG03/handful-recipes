@@ -1,15 +1,16 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { GapStatus, toOwner, toPublic } from "@/lib/domain";
-import { EDIT_KEY_HEADER, errorResponse, json } from "@/lib/server/http";
+import { errorResponse, json } from "@/lib/server/http";
 import { getRecipe, isOwner, saveRecipe } from "@/lib/server/recipes";
+import { isJobActive } from "@/lib/processing";
 
 type Ctx = { params: Promise<{ id: string }> };
 
 export async function GET(req: NextRequest, ctx: Ctx) {
   const recipe = await getRecipe((await ctx.params).id);
   if (!recipe) return json({ error: "Not found" }, 404);
-  const owner = isOwner(recipe, req.headers.get(EDIT_KEY_HEADER));
+  const owner = await isOwner(recipe);
   return json({ recipe: owner ? toOwner(recipe) : toPublic(recipe), owner });
 }
 
@@ -26,7 +27,8 @@ export async function PATCH(req: NextRequest, ctx: Ctx) {
   try {
     const recipe = await getRecipe((await ctx.params).id);
     if (!recipe) return json({ error: "Not found" }, 404);
-    if (!isOwner(recipe, req.headers.get(EDIT_KEY_HEADER))) return json({ error: "Forbidden" }, 403);
+    if (!await isOwner(recipe)) return json({ error: "Forbidden" }, 403);
+    if (isJobActive(recipe.job)) return json({ error: "Wait until background processing finishes before editing." }, 409);
     const patch = Patch.parse(await req.json());
     if (patch.title) recipe.title = patch.title;
     for (const s of patch.steps ?? []) {

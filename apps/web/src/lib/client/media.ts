@@ -81,12 +81,22 @@ export async function captureFrames(src: string, seconds: number[], maxWidth = 9
   if (!g) throw new Error("Canvas not available");
   const out: Blob[] = [];
   for (const sec of seconds) {
-    await new Promise<void>((resolve) => {
-      v.onseeked = () => resolve();
-      v.currentTime = Math.min(Math.max(0, sec), Math.max(0, v.duration - 0.05));
+    await new Promise<void>((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error("The video took too long to seek. Try an MP4 video.")), 15000);
+      v.onseeked = () => { clearTimeout(timeout); resolve(); };
+      v.onerror = () => { clearTimeout(timeout); reject(new Error("Could not read the video frame.")); };
+      v.currentTime = Math.min(Math.max(0.01, sec), Math.max(0.01, v.duration - 0.05));
     });
     g.drawImage(v, 0, 0, canvas.width, canvas.height);
     out.push(await new Promise<Blob>((res, rej) => canvas.toBlob((b) => (b ? res(b) : rej(new Error("Frame capture failed"))), "image/jpeg", 0.85)));
   }
+  v.removeAttribute("src");
+  v.load();
   return out;
+}
+
+/** Evenly spaced actual video samples, prepared before the upload is handed to the server. */
+export function sampleTimes(duration: number): number[] {
+  const count = Math.min(24, Math.max(6, Math.ceil(duration / 5)));
+  return Array.from({ length: count }, (_, i) => ((i + 0.5) / count) * duration);
 }

@@ -53,7 +53,7 @@ export function RecipeView({ recipe, renderStepExtra }: { recipe: PublicRecipe; 
 
       <ol className="space-y-4" aria-label="Steps">
         {recipe.steps.map((s) => (
-          <li key={s.id} className={`card ${activeStep === s.id ? "border-barro" : ""}`}>
+          <li key={s.id} id={`step-${s.id}`} className={`card ${activeStep === s.id ? "border-barro" : ""}`}>
             <div className="flex items-start gap-4">
               <span aria-hidden className="font-display text-3xl leading-none text-barro">
                 {s.order}
@@ -79,6 +79,7 @@ export function RecipeView({ recipe, renderStepExtra }: { recipe: PublicRecipe; 
           </li>
         ))}
       </ol>
+      {recipe.gaps.filter((g) => !g.stepId && g.answer).map((g) => <AnswerNote key={g.id} gap={g} cookName={recipe.cookName} />)}
     </div>
   );
 }
@@ -88,10 +89,11 @@ function AnswerNote({ gap, cookName }: { gap: Gap; cookName: string }) {
   return (
     <figure className="rounded-2xl border-l-4 border-laurel bg-laurel/10 p-3">
       <figcaption className="meta mb-1">
-        {cookName} answered: <span className="italic">“{gap.question}”</span>
+        {gap.answer.author === "owner" ? "Added by the person recording" : `${cookName} answered`}: <span className="italic">“{gap.question}”</span>
       </figcaption>
       <blockquote className="text-lg">“{gap.answer.note}”</blockquote>
-      <audio src={gap.answer.audioUrl} controls className="mt-2 w-full" aria-label={`${cookName}'s voice answer`} />
+      {!gap.answer.resolved && <p className="text-base text-ciruela">Needs clarification — this detail is not confirmed yet.</p>}
+      {gap.answer.audioUrl && <audio src={gap.answer.audioUrl} controls className="mt-2 w-full" aria-label="Original voice answer" />}
     </figure>
   );
 }

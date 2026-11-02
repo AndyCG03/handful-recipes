@@ -57,6 +57,7 @@ export async function transcribe(
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey()}`, Accept: "application/json" },
     body: form,
+    signal: AbortSignal.timeout(120_000),
   });
   return (await check(res, "transcribe")).json();
 }
@@ -67,7 +68,7 @@ export async function uploadFile(bytes: Buffer, filename: string, mime: string):
   const form = new FormData();
   form.append("purpose", "user_data");
   form.append("file", new Blob([new Uint8Array(bytes)], { type: mime }), filename);
-  const res = await fetch(`${BASE}/files`, { method: "POST", headers: { Authorization: `Bearer ${apiKey()}` }, body: form });
+  const res = await fetch(`${BASE}/files`, { method: "POST", headers: { Authorization: `Bearer ${apiKey()}` }, body: form, signal: AbortSignal.timeout(60_000) });
   const json = (await (await check(res, "files.upload")).json()) as { id: string };
   return json.id;
 }
@@ -107,6 +108,7 @@ export async function sparkJson(params: {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey()}`, "Content-Type": "application/json" },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(150_000),
   });
   const text = outputText((await (await check(res, "spark")).json()) as ResponsesOutput);
   return JSON.parse(text);
@@ -118,6 +120,7 @@ export async function samBoxes(fileId: string, kind: "image" | "video", prompt: 
   const res = await fetch(`${BASE}/responses`, {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey()}`, "Content-Type": "application/json" },
+    signal: AbortSignal.timeout(45_000),
     body: JSON.stringify({
       model: MODELS.sam,
       stream: true,

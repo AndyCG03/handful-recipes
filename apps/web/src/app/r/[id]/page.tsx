@@ -19,7 +19,7 @@ export default async function SharedRecipePage({ params }: Props) {
   if (!recipe || recipe.status !== "ready") notFound();
   const pub = toPublic(recipe);
   return (
-    <div className="space-y-6 pt-4">
+    <div className="mx-auto max-w-3xl space-y-6 pt-4">
       <header className="space-y-1">
         <h1 className="font-display text-4xl">{pub.title}</h1>
         <p className="meta">The way {pub.cookName} makes it. Tap a step to watch it.</p>

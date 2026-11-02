@@ -4,7 +4,6 @@ import type { AskView, OwnerRecipe, PipelineStage, PublicRecipe } from "@/lib/do
 /** Typed client for the app's API. */
 
 const STORAGE = process.env.NEXT_PUBLIC_STORAGE_DRIVER === "blob" ? "blob" : "local";
-const EDIT_KEY_HEADER = "x-edit-key";
 
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
   const res = await fetch(url, init);
@@ -14,13 +13,14 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 /** Uploads a file to app storage and returns its URL. */
-export async function uploadFile(file: Blob, pathname: string, onProgress?: (pct: number) => void): Promise<string> {
+export async function uploadFile(file: Blob, pathname: string, onProgress?: (pct: number) => void, askToken?: string): Promise<string> {
   const path = `uploads/${pathname}`;
   if (STORAGE === "blob") {
     const res = await upload(path, file, {
       access: "public",
       handleUploadUrl: "/api/blob-upload",
       contentType: file.type,
+      clientPayload: askToken,
       multipart: file.size > 20 * 1024 * 1024,
       onUploadProgress: (e) => onProgress?.(e.percentage),
     });
@@ -37,38 +37,50 @@ export function createRecipe(input: {
   videoUrl: string;
   audioUrl: string;
   durationSec: number;
+  sampleFrames?: Array<{ frameUrl: string; frameSec: number }>;
   consent: true;
 }) {
-  return request<{ recipe: OwnerRecipe; editKey: string }>("/api/recipes", {
+  return request<{ recipe: OwnerRecipe }>("/api/recipes", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
   });
 }
 
-export function getRecipe(id: string, editKey: string | null) {
+export function getRecipe(id: string) {
   return request<{ recipe: OwnerRecipe | PublicRecipe; owner: boolean }>(`/api/recipes/${id}`, {
-    headers: editKey ? { [EDIT_KEY_HEADER]: editKey } : {},
     cache: "no-store",
+  });
+}
+
+export function startBackground(id: string) {
+  return request<{ recipe: OwnerRecipe }>(`/api/recipes/${id}/background`, {
+    method: "POST",
+  });
+}
+
+export function answerOwnQuestion(id: string, answer:
+  | { mode: "text"; gapId: string; text: string }
+  | { mode: "voice"; gapId: string; audioUrl: string }) {
+  return request<{ recipe: OwnerRecipe }>(`/api/recipes/${id}/answers`, {
+    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(answer),
   });
 }
 
 export function runStage(
   id: string,
-  editKey: string,
   stage: PipelineStage,
   frames?: Array<{ stepId: string; frameUrl: string; frameSec: number }>,
 ) {
   return request<{ recipe: OwnerRecipe }>(`/api/recipes/${id}/process`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", [EDIT_KEY_HEADER]: editKey },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(stage === "handful" ? { stage, frames: frames ?? [] } : { stage }),
   });
 }
 
 export function patchRecipe(
   id: string,
-  editKey: string,
   patch: {
     title?: string;
     steps?: Array<{ id: string; action: string }>;
@@ -77,7 +89,7 @@ export function patchRecipe(
 ) {
   return request<{ recipe: OwnerRecipe }>(`/api/recipes/${id}`, {
     method: "PATCH",
-    headers: { "Content-Type": "application/json", [EDIT_KEY_HEADER]: editKey },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(patch),
   });
 }

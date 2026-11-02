@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import type { Gap, GapKind, OwnerRecipe } from "@/lib/domain";
 import { patchRecipe } from "@/lib/client/api";
+import { OwnerAnswer } from "./OwnerAnswer";
 
 const KIND_LABEL: Record<GapKind, string> = {
   heat: "Heat",
@@ -14,7 +15,7 @@ const KIND_LABEL: Record<GapKind, string> = {
 };
 
 /** Questions the video left open. The owner picks which ones to send; the cook answers by voice. */
-export function QuestionsPanel({ recipe, editKey, onChange }: { recipe: OwnerRecipe; editKey: string; onChange: (r: OwnerRecipe) => void }) {
+export function QuestionsPanel({ recipe, onChange }: { recipe: OwnerRecipe; onChange: (r: OwnerRecipe) => void }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -30,9 +31,11 @@ export function QuestionsPanel({ recipe, editKey, onChange }: { recipe: OwnerRec
     setBusy(true);
     setError(null);
     try {
-      onChange((await patchRecipe(recipe.id, editKey, { gaps })).recipe);
+      onChange((await patchRecipe(recipe.id, { gaps })).recipe);
+      return true;
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not save");
+      return false;
     } finally {
       setBusy(false);
     }
@@ -41,13 +44,18 @@ export function QuestionsPanel({ recipe, editKey, onChange }: { recipe: OwnerRec
   async function sendByWhatsApp() {
     const ids = [...selected].filter((id) => open.some((g) => g.id === id));
     const text = `Hola ${recipe.cookName} ❤️ Estoy guardando tu receta de ${recipe.title}. Tengo ${ids.length + sent.length} preguntitas, ¿me las contestas con un audio? ${askUrl}`;
-    // Open synchronously (inside the click) so the browser doesn't block it, then persist.
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank", "noopener");
-    if (ids.length) await update(ids.map((id) => ({ id, status: "sent" as const })));
+    const tab = window.open("about:blank", "_blank");
+    if (tab) tab.opener = null;
+    if (ids.length && !await update(ids.map((id) => ({ id, status: "sent" as const })))) { tab?.close(); return; }
+    if (tab) tab.location.href = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    else setError("The share window was blocked. Use Copy answer link instead.");
   }
 
   async function copyLink() {
     try {
+      const ids = [...selected].filter((id) => open.some((g) => g.id === id));
+      if (!ids.length && !sent.length) return;
+      if (ids.length && !await update(ids.map((id) => ({ id, status: "sent" as const })))) return;
       await navigator.clipboard.writeText(askUrl);
       setCopied(true);
     } catch {
@@ -66,14 +74,15 @@ export function QuestionsPanel({ recipe, editKey, onChange }: { recipe: OwnerRec
   return (
     <section aria-labelledby="questions" className="space-y-4">
       <h2 id="questions" className="font-display text-3xl">
-        Questions for {recipe.cookName}
+        Complete the story
       </h2>
-      <p className="meta">What the video didn&apos;t say. Choose what to ask; they answer with a voice note, no app needed.</p>
+      <p className="meta">Know the answer? Add it here by text or voice. For the details only {recipe.cookName} knows, send a link — no app installation needed.</p>
 
       {open.length > 0 && (
         <ul className="space-y-3">
           {open.map((g) => (
-            <li key={g.id} className="card flex items-start gap-3">
+            <li key={g.id} className="card space-y-3">
+              <div className="flex items-start gap-3">
               <input
                 type="checkbox"
                 className="mt-1 size-6 shrink-0 accent-barro"
@@ -85,6 +94,9 @@ export function QuestionsPanel({ recipe, editKey, onChange }: { recipe: OwnerRec
               <button type="button" className="btn-ghost min-h-11 px-2 text-base" disabled={busy} onClick={() => update([{ id: g.id, status: "dismissed" }])}>
                 Dismiss
               </button>
+              </div>
+              {g.answer && !g.answer.resolved && <p className="meta">Previous reply needs clarification: “{g.answer.note}”</p>}
+              <OwnerAnswer recipeId={recipe.id} gap={g} disabled={busy} onBusy={setBusy} onChange={onChange} />
             </li>
           ))}
         </ul>
@@ -97,6 +109,7 @@ export function QuestionsPanel({ recipe, editKey, onChange }: { recipe: OwnerRec
             {sent.map((g) => (
               <li key={g.id} className="card">
                 <GapBody gap={g} stepOrder={g.stepId ? stepOrder.get(g.stepId) : undefined} />
+                <div className="mt-3"><OwnerAnswer recipeId={recipe.id} gap={g} disabled={busy} onBusy={setBusy} onChange={onChange} /></div>
               </li>
             ))}
           </ul>
@@ -108,13 +121,16 @@ export function QuestionsPanel({ recipe, editKey, onChange }: { recipe: OwnerRec
           <button type="button" className="btn-primary" disabled={busy || (selected.size === 0 && sent.length === 0)} onClick={sendByWhatsApp}>
             Send by WhatsApp
           </button>
-          <button type="button" className="btn-secondary" onClick={copyLink}>
+          <button type="button" className="btn-secondary" disabled={busy || (selected.size === 0 && sent.length === 0)} onClick={copyLink}>
             {copied ? "Link copied" : "Copy answer link"}
           </button>
         </div>
       )}
 
-      {answered.length > 0 && <p className="meta">{answered.length} answered — you&apos;ll find them on their steps above.</p>}
+      {answered.length > 0 && <details className="card">
+        <summary className="cursor-pointer font-medium">{answered.length} details completed</summary>
+        <ul className="mt-3 space-y-3">{answered.map((g) => <li key={g.id}><p className="text-base text-laurel">{g.question}</p><p>{g.answer?.note}</p></li>)}</ul>
+      </details>}
       {error && (
         <p role="alert" className="text-barro">
           {error}

@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-10-28T15:24:46.336Z",
+  "api": "LOCAL STUB — no real inference and no credits used",
+  "checks": [
+    "background processing requires owner credential",
+    "returns 202 before AI finishes; repeated start reuses active job",
+    "server completes all stages independently of browser, with actual sample timestamp",
+    "owner answers directly by text with attribution and no invented audio",
+    "unclear answer is saved without resolving the question",
+    "owner voice answer uses speech transcription and merge",
+    "family answer-link flow remains functional",
+    "public API excludes owner credentials, model logs and job/sample metadata",
+    "failed analysis resumes from checkpoint without paying for transcription again",
+    "landing and shared recipe render successfully"
+  ],
+  "counts": {
+    "transcribe": 4,
+    "analyze": 3,
+    "sam": 2,
+    "merge": 4
+  },
+  "enqueueMs": 122.70579999999973,
+  "fixtureRecipeIds": [
+    "dec38dcc-8ec7-4af0-8171-4adb671bbd2f",
+    "0083c59f-b69e-4801-9dd9-c4d7f0c6255d"
+  ]
+}
