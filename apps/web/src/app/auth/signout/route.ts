@@ -3,5 +3,5 @@ import { supabaseServer } from "@/lib/supabase/server";
 
 export async function POST(req: NextRequest) {
   await (await supabaseServer()).auth.signOut();
-  return NextResponse.redirect(new URL("/", req.url), 303);
+  return NextResponse.redirect(new URL("/?signedout=1", req.url), 303);
 }

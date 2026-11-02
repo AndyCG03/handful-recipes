@@ -1,11 +1,11 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useId, useState } from "react";
+import { flashAuthMessage } from "@/components/AuthToast";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 
 export function LoginForm() {
-  const router = useRouter();
   const raw = useSearchParams().get("next") ?? "/";
   const next = raw.startsWith("/") && !raw.startsWith("//") ? raw : "/"; // same-site redirects only
   const ids = { email: useId(), password: useId() };
@@ -23,11 +23,13 @@ export function LoginForm() {
     const { data, error } = mode === "signin"
       ? await auth.signInWithPassword({ email, password })
       : await auth.signUp({ email, password });
-    setBusy(false);
-    if (error) return setMessage(error.message);
-    if (!data.session) return setMessage("Check your email to confirm your account, then sign in.");
-    router.replace(next);
-    router.refresh();
+    if (error || !data.session) {
+      setBusy(false);
+      return setMessage(error ? error.message : "Check your email to confirm your account, then sign in.");
+    }
+    flashAuthMessage(mode === "signin" ? `Welcome back. You're signed in as ${email}.` : `Your account is ready. You're signed in as ${email}.`);
+    // Full load so the header and the confirmation toast reflect the new session.
+    window.location.assign(next);
   }
 
   return (
@@ -42,7 +44,7 @@ export function LoginForm() {
       </div>
       {message && <p role="alert" className="text-barro">{message}</p>}
       <button type="submit" className="btn-primary w-full" disabled={busy}>
-        {busy ? "One moment…" : mode === "signin" ? "Sign in" : "Create account"}
+        {busy ? "Signing you in…" : mode === "signin" ? "Sign in" : "Create account"}
       </button>
       <button type="button" className="btn-ghost w-full" onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setMessage(null); }}>
         {mode === "signin" ? "New here? Create an account" : "Already have an account? Sign in"}

@@ -27,3 +27,4 @@
 ## 2026-11-01 — cuentas y Supabase
 - Proyecto Supabase handful-recipes (Mezia): tabla recipes con RLS y acceso solo de servidor.
 - Login con Supabase Auth (correo y contraseña); recetas por usuario, "Your recipes" desde cualquier dispositivo, límite de 10 recetas por día y subida protegida (la abuela solo sube audio con su enlace).
+- Avisos de inicio y cierre de sesión, encabezado responsive, README en inglés y licencia MIT.

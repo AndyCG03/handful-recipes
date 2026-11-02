@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans, Fraunces } from "next/font/google";
+import { AuthToast } from "@/components/AuthToast";
 import { SiteHeader } from "@/components/SiteHeader";
 import "./globals.css";
 
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="min-h-dvh">
         <SiteHeader />
         <main className="mx-auto w-full max-w-6xl px-5 pb-16 sm:px-8">{children}</main>
+        <AuthToast />
       </body>
     </html>
   );
