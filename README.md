@@ -3,6 +3,8 @@
 **Some recipes were never written.** Record someone you love while they cook. Handful Recipes turns the video into a living recipe: every step linked to its moment in the video, every "un puñito" kept as it was said and shown (never converted into invented grams), and questions about what was left unsaid, which the cook can answer with a voice note.
 
 - **Live product:** https://handful-recipes.vercel.app
+- **Demo video:** https://youtu.be/tsUVpbcjqhM
+- **Judges:** demo account credentials are in the submission form
 - **Hackathon:** Meta Global AI Developer Hackathon 2026 · Indie Developer Track · *Build for Your World*
 - **Team:** Devisi Coder — Andy Clemente (andycg)
 

@@ -41,11 +41,9 @@ The demo uses one short test recording of a simple bowl of cereal, and a synthet
 
 **Live product:** https://handful-recipes.vercel.app
 
-**Live example:** (pegar el enlace familiar del paso 2)
-
 **Demo account for judges:** (correo y contraseña del paso 4)
 
-**Demo video:** (pegar el enlace de YouTube del paso 6)
+**Demo video:** https://youtu.be/tsUVpbcjqhM
 
 ## Limitaciones conocidas
 
