@@ -1,0 +1,17 @@
+Some recipes were never written.
+
+"Le echas un puñito." A handful. No one ever measured it. And when that person is gone, so is the recipe.
+
+Handful Recipes keeps their way of cooking. Just film them, no script, no measuring.
+
+Meta's models listen and watch. Muse Voice Transcribe, Muse Spark and SAM turn the video into a living recipe.
+
+Every step keeps its source, and it never makes up a number.
+
+It notices what was left unsaid, and turns each gap into a question.
+
+The cook gets a link, and answers with their voice.
+
+We tested one short recording. It's not a benchmark, and accuracy still has to be measured.
+
+All of this was built during the hackathon, because some recipes only live in someone's hands.

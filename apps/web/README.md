@@ -33,7 +33,7 @@ Browser                                   Server (route handlers)               
 -------                                   -----------------------                 --------------
 pick video → extract 16 kHz WAV (WebAudio)
 upload video + WAV ─────────────────────► Vercel Blob (client upload)
-POST /api/recipes ──────────────────────► create recipe (edit key hashed)
+POST /api/recipes ──────────────────────► create recipe (signed-in owner)
 POST /process {transcribe} ─────────────► read WAV ────────────────────────────► Voice Transcribe (DIARIZATION)
 POST /process {analyze} ────────────────► upload video to Files ───────────────► Spark 1.3 (video + transcript, JSON schema)
 capture frames of "handful" steps
@@ -50,7 +50,7 @@ Each stage is one short request (`maxDuration` 300 s), so it fits serverless lim
 | `src/lib/server/pipeline.ts` | Pipeline stages and answer merge |
 | `src/lib/server/prompts.ts` | Prompts + JSON schemas for Spark |
 | `src/lib/server/storage.ts` | Storage driver: local disk or Vercel Blob (immutable JSON versions to avoid CDN staleness) |
-| `src/lib/server/recipes.ts` | Repository, owner check (sha256 + timing-safe compare), provenance (`runs`) |
+| `src/lib/server/recipes.ts` | Repository, owner check (Supabase session), provenance (`runs`) |
 | `src/lib/client/*` | Browser media (WAV, frames), typed API client, pipeline orchestration |
 | `src/app/new` | Record / upload a recipe |
 | `src/app/recipes/[id]` | Owner review + questions to send by WhatsApp |
@@ -62,5 +62,5 @@ Each stage is one short request (`maxDuration` 300 s), so it fits serverless lim
 - Creators sign in with Supabase Auth (email + password); recipes belong to their user id and each account can create 10 per day.
 - Uploads require a session, except a cook's WAV answer, which requires a valid ask token.
 - The cook's page uses a separate random **ask token**; it can only answer questions that were sent.
-- Public views strip `editKeyHash`, `askToken` and model run logs.
+- Public views strip `ownerId`, `askToken` and model run logs.
 - Media is stored in public Blob URLs with random suffixes (unguessable, not access-controlled).

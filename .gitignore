@@ -20,3 +20,6 @@ node_modules/
 
 # raw validation media and transcripts (personal data)
 eval/results/validation_*/
+
+# submission package
+release/

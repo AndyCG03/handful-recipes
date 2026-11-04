@@ -3,10 +3,12 @@ import { loadFont as loadDisplay } from "@remotion/google-fonts/Fraunces";
 import React from "react";
 import {
   AbsoluteFill,
+  Audio,
   Composition,
   Easing,
   Img,
   OffthreadVideo,
+  Sequence,
   Series,
   interpolate,
   spring,
@@ -160,10 +162,70 @@ const SCENES: Scene[] = [
   { s: 10, el: () => <Statement eyebrow="Built during the hackathon, from October 27" title="This recipe won’t be lost." size={100} sub="handful-recipes.vercel.app · github.com/AndyCG03/handful-recipes · Team Devisi Coder" /> },
 ];
 
+const MUSIC_VOLUME = 0.4;
+const MUSIC_DUCKED = 0.1;
 const TOTAL = SCENES.reduce((a, s) => a + sec(s.s), 0);
+
+/** Scene start frames, for placing sound effects. */
+const STARTS = SCENES.reduce<number[]>((acc, sc, i) => [...acc, i === 0 ? 0 : acc[i - 1] + sec(SCENES[i - 1].s)], []);
+/** Soft taps on the cards that appear one by one: [scene index, delay in frames]. */
+const TAPS: Array<[number, number]> = [
+  [4, 20], [4, 60], [4, 100],
+  [6, 30], [6, 70], [6, 110], [6, 150],
+  [8, 15], [8, 40], [8, 65],
+];
+
+const Sfx: React.FC<{ at: number; src: string; volume: number }> = ({ at, src, volume }) => (
+  <Sequence from={at} layout="none">
+    <Audio src={staticFile(src)} volume={volume} />
+  </Sequence>
+);
+
+/** Narration phrases, cut at the pauses of narration.mp3: [scene, offset in scene, from, to] in seconds. */
+const NARRATION: Array<[number, number, number, number]> = [
+  [0, 1, 0, 2.2],
+  [1, 0.5, 2.2, 9.6],
+  [2, 0.5, 9.6, 14.9],
+  [4, 0.5, 14.9, 22.6],
+  [5, 1, 22.6, 26.2],
+  [6, 0.5, 26.2, 30.6],
+  [7, 1, 30.6, 33.6],
+  [8, 1, 33.6, 38.8],
+  [9, 1, 38.8, 44.36],
+];
+const VOICE = NARRATION.map(([scene, offset, from, to]) => {
+  const start = STARTS[scene] + sec(offset);
+  return { start, end: start + sec(to - from), from: sec(from), to: sec(to) };
+});
+
+/** Music level, lowered while the voice speaks. */
+const musicVolume = (f: number) => {
+  const speaking = VOICE.some((v) => f >= v.start - 10 && f <= v.end + 10);
+  const near = VOICE.reduce((best, v) => Math.min(best, f < v.start ? v.start - f : f > v.end ? f - v.end : 0), Infinity);
+  const duck = speaking ? interpolate(near, [0, 10], [MUSIC_DUCKED, MUSIC_DUCKED], { extrapolateRight: "clamp" }) : interpolate(near, [10, 25], [MUSIC_DUCKED, MUSIC_VOLUME], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  return duck * interpolate(f, [0, 45, TOTAL - 90, TOTAL], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+};
+
+const Soundtrack: React.FC = () => (
+  <>
+    {VOICE.map((v) => (
+      <Sequence key={v.start} from={v.start} durationInFrames={v.end - v.start} layout="none">
+        <Audio src={staticFile("audio/narration.mp3")} trimBefore={v.from} trimAfter={v.to} />
+      </Sequence>
+    ))}
+    <Audio
+      src={staticFile("audio/music.mp3")}
+      volume={musicVolume}
+    />
+    {STARTS.slice(1, -1).map((at) => <Sfx key={at} at={at} src="audio/trans.mp3" volume={0.5} />)}
+    {TAPS.map(([scene, delay]) => <Sfx key={`${scene}-${delay}`} at={STARTS[scene] + delay} src="audio/tap.mp3" volume={0.35} />)}
+    <Sfx at={STARTS[STARTS.length - 1]} src="audio/end.mp3" volume={0.8} />
+  </>
+);
 
 const Demo: React.FC = () => (
   <AbsoluteFill style={{ background: C.bg }}>
+    <Soundtrack />
     <Series>
       {SCENES.map((scene, i) => (
         <Series.Sequence key={i} durationInFrames={sec(scene.s)}>
